@@ -8,6 +8,7 @@ let gridSize = 20;
 let textureSize = canvas.width / gridSize;
 let isKeyPressed = false;
 
+let gameDirection;
 const snake = [];
 
 window.addEventListener("keydown", function (e) {
@@ -91,6 +92,7 @@ function spawnSnake() {
 
   let directions = ['left', 'right', 'up', 'down'];
   let direction = directions[randomNum(0, 3)];
+  gameDirection = direction;
 
   for (let i = 0; i < 4; i++) {
     snake.push(
@@ -139,7 +141,6 @@ function updatePositions() {
   }
 }
 
-
 function randomCordinate(min, max) {
   const random = Math.floor(Math.random() * (max - min + 1)) + min;
   return random - (random % textureSize);
@@ -149,9 +150,15 @@ function randomNum(min, max) {
   return random;
 }
 
+function repeatingTask(){
+  updatePositions();
+  regenerateSnake();
+
+  setTimeout(yourFunction, 1000);
+}
 
 spawnSnake();
-regenerateSnake();
 
 console.log(snake)
 
+repeatingTask();
