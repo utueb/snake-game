@@ -1,12 +1,14 @@
 const canvas = document.getElementById("canvas");
 const context = canvas.getContext("2d");
-let speed = 500;
-let foodCount = 1;
-let borderedGame = false;
-let primaryColor, secondaryColor;
-let gridSize = 20;
+
+let speed = 1000,
+  foodCount = 1,
+  borderedGame = true,
+  primaryColor = "aqua",
+  secondaryColor = "darkCyan",
+  gridSize = 10;
+
 let textureSize = canvas.width / gridSize;
-let isKeyPressed = false;
 
 document.getElementById("game-rules").addEventListener("click", function (e) {
   document.getElementById("gamerules-list").classList.toggle("open");
@@ -33,6 +35,16 @@ document
     })
   );
 
+function randomCordinate(min, max) {
+  const random = Math.floor(Math.random() * (max - min + 1)) + min;
+  return random - (random % textureSize);
+}
+function randomNum(min, max) {
+  const random = Math.floor(Math.random() * (max - min + 1)) + min;
+  return random;
+}
+
+let isKeyPressed = false;
 window.addEventListener("keydown", function (e) {
   if (!isKeyPressed) {
     switch (e.key) {
@@ -49,8 +61,6 @@ window.addEventListener("keydown", function (e) {
       case "d":
       case "ArrowRight":
         break;
-
-        isKeyPressed = true;
     }
   }
 });
@@ -67,20 +77,18 @@ function generateBackground(num) {
 
       if (row % 2 == 0) {
         col % 2 === 0
-          ? (context.fillStyle = "aqua")
-          : (context.fillStyle = "darkCyan");
+          ? (context.fillStyle = primaryColor)
+          : (context.fillStyle = secondaryColor);
       } else {
         col % 2 === 0
-          ? (context.fillStyle = "darkCyan")
-          : (context.fillStyle = "aqua");
+          ? (context.fillStyle = secondaryColor)
+          : (context.fillStyle = primaryColor);
       }
 
       context.fillRect(x, y, textureSize, textureSize);
     }
   }
 }
-
-generateBackground(gridSize);
 
 class Section {
   constructor(x, y, image, direction) {
@@ -183,6 +191,7 @@ function sectionDirection(sectionType, headDirection, headCords) {
 }
 
 function regenerateSnake() {
+  generateBackground(gridSize);
   for (let i = 0; i < snake.length; i++) {
     const section = new Image();
     section.src = snake[i].image;
@@ -199,16 +208,3 @@ function regenerateSnake() {
   }
 }
 spawnSnake();
-
-/*function updatePosition() {
-  for (let i = 0; i < snake.length; i++) {}
-}*/
-
-function randomCordinate(min, max) {
-  const random = Math.floor(Math.random() * (max - min + 1)) + min;
-  return random - (random % textureSize);
-}
-function randomNum(min, max) {
-  const random = Math.floor(Math.random() * (max - min + 1)) + min;
-  return random;
-}
