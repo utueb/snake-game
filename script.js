@@ -1,7 +1,7 @@
 const canvas = document.getElementById("canvas");
 const context = canvas.getContext("2d");
 
-let speed = 1000,
+let speed = 750,
   foodCount = 1,
   borderedGame = true,
   primaryColor = "aqua",
@@ -53,19 +53,19 @@ window.addEventListener("keydown", function (e) {
     switch (e.key) {
       case "w":
       case "ArrowUp":
-        if (direction != "up" && direction != "down") move("up");
+        if (direction != "up" && direction != "down") turn("up");
         break;
       case "s":
       case "ArrowDown":
-        if (direction != "up" && direction != "down") move("down");
+        if (direction != "up" && direction != "down") turn("down");
         break;
       case "a":
       case "ArrowLeft":
-        if (direction != "right" && direction != "left") move("left");
+        if (direction != "right" && direction != "left") turn("left");
         break;
       case "d":
       case "ArrowRight":
-        if (direction != "right" && direction != "left") move("right");
+        if (direction != "right" && direction != "left") turn("right");
         break;
     }
   }
@@ -215,10 +215,31 @@ function regenerateSnake() {
 }
 spawnSnake();
 
-function move(d) {
+function turn(d) {
   keyboardTimeOut = true;
   setTimeout(() => {
     keyboardTimeOut = false;
   }, speed);
   direction = d;
 }
+
+setInterval(() => {
+  if (direction == "up") {
+    snake[0].coordinates.y -= textureSize;
+    snake[0].image = "images/head/up.png";
+  }
+  if (direction == "down") {
+    snake[0].coordinates.y += textureSize;
+    snake[0].image = "images/head/down.png";
+  }
+  if (direction == "left") {
+    snake[0].coordinates.x -= textureSize;
+    snake[0].image = "images/head/left.png";
+  }
+  if (direction == "right") {
+    snake[0].coordinates.x += textureSize;
+    snake[0].image = "images/head/right.png";
+  }
+
+  regenerateSnake();
+}, speed);
