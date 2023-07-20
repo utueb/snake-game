@@ -87,21 +87,21 @@ function spawnSnake() {
   );
   let bodySection = sectionDirection("body", headDirection, headCords);
   let tailSection = sectionDirection("tail", headDirection, headCords);
-  console.log(bodySection, tailSection);
+
   snake.push(
     new Section(
-      bodySection[2].x,
-      bodySection[2].y,
-      `images/body/${bodySection[1]}.png`,
+      bodySection[1].x,
+      bodySection[1].y,
+      `images/body/${bodySection[2]}.png`,
       "left"
     )
   );
 
   snake.push(
     new Section(
-      tailSection[2].x,
-      tailSection[2].y,
-      `images/tail/${bodySection[1]}.png`,
+      tailSection[1].x,
+      tailSection[1].y,
+      `images/tail/${tailSection[2]}.png`,
       "left"
     )
   );
@@ -110,39 +110,51 @@ function spawnSnake() {
 }
 
 function sectionDirection(sectionType, headDirection, headCords) {
-  let offset = sectionType == "body" ? textureSize : textureSize * 2;
+  let direction;
+  let cords = { x: headCords.x, y: headCords.y };
   switch (headDirection) {
     case "left":
-      headCords.x += offset;
-      sectionType == "body"
-        ? (bodyDirection = "vertical")
-        : (bodyDirection = "left");
+      if (sectionType == "body") {
+        direction = "vertical";
+        cords.x = headCords.x + textureSize;
+      } else {
+        direction = "left";
+        cords.x = headCords.x + textureSize * 2;
+      }
 
       break;
     case "right":
-      headCords.x -= offset;
+      if (sectionType == "body") {
+        direction = "vertical";
+        cords.x = headCords.x - textureSize;
+      } else {
+        direction = "right";
+        cords.x = headCords.x - textureSize * 2;
+      }
 
-      sectionType == "body"
-        ? (bodyDirection = "vertical")
-        : (bodyDirection = "right");
       break;
     case "up":
-      headCords.y += offset;
-      sectionType == "body"
-        ? (bodyDirection = "horizontal")
-        : (bodyDirection = "up");
+      if (sectionType == "body") {
+        direction = "horizontal";
+        cords.y = headCords.y + textureSize;
+      } else {
+        direction = "up";
+        cords.y = headCords.y + textureSize * 2;
+      }
 
       break;
     case "down":
-      headCords.y -= offset;
-      bodyDirection = "horizontal";
-      sectionType == "body"
-        ? (bodyDirection = "horizontal")
-        : (bodyDirection = "down");
+      if (sectionType == "body") {
+        direction = "horizontal";
+        cords.y = headCords.y - textureSize;
+      } else {
+        direction = "down";
+        cords.y = headCords.y - textureSize * 2;
+      }
+
       break;
   }
-
-  return [sectionType, headDirection, headCords];
+  return [sectionType, cords, direction];
 }
 
 function regenerateSnake() {
