@@ -162,16 +162,12 @@ function randomNum(min, max) {
 let gameDirection;
 let nextDirection;
 
-const vertical = ['left', 'right']
-const horizontal = ['up', 'down']
+const horizontal = ['left', 'right']
+const vertical = ['up', 'down']
 function changeDirection(someDirection){
-  firstCheck: if(vertical.includes(someDirection) && vertical.includes(gameDirection))
-    break firstCheck;
-  
-  secondCheck: if(horizontal.includes(someDirection) && horizontal.includes(gameDirection))
-    break secondCheck;
-
-  gameDirection = someDirection;  
+  if(!(vertical.includes(someDirection) && vertical.includes(gameDirection)))
+    if(!(horizontal.includes(someDirection) && horizontal.includes(gameDirection)))
+      gameDirection = someDirection;
 }
 
 
