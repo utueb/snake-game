@@ -6,9 +6,12 @@ let speed = 1000,
   borderedGame = true,
   primaryColor = "aqua",
   secondaryColor = "darkCyan",
-  gridSize = 10;
+  gridSize = 10,
+  keyboardTimeOut = false;
 
 let textureSize = canvas.width / gridSize;
+
+let direction = "right";
 
 document.getElementById("game-rules").addEventListener("click", function (e) {
   document.getElementById("gamerules-list").classList.toggle("open");
@@ -46,20 +49,23 @@ function randomNum(min, max) {
 
 let isKeyPressed = false;
 window.addEventListener("keydown", function (e) {
-  if (!isKeyPressed) {
+  if (!isKeyPressed && keyboardTimeOut == false) {
     switch (e.key) {
       case "w":
       case "ArrowUp":
+        if (direction != "up" && direction != "down") move("up");
         break;
-
       case "s":
       case "ArrowDown":
+        if (direction != "up" && direction != "down") move("down");
         break;
       case "a":
       case "ArrowLeft":
+        if (direction != "right" && direction != "left") move("left");
         break;
       case "d":
       case "ArrowRight":
+        if (direction != "right" && direction != "left") move("right");
         break;
     }
   }
@@ -208,3 +214,11 @@ function regenerateSnake() {
   }
 }
 spawnSnake();
+
+function move(d) {
+  keyboardTimeOut = true;
+  setTimeout(() => {
+    keyboardTimeOut = false;
+  }, speed);
+  direction = d;
+}
