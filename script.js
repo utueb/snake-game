@@ -8,6 +8,8 @@ let gridSize = 20;
 let textureSize = canvas.width / gridSize;
 let isKeyPressed = false;
 
+const snake = [];
+
 window.addEventListener("keydown", function (e) {
   if (!isKeyPressed) {
     switch (e.key) {
@@ -58,97 +60,58 @@ function generateBackground(num) {
 generateBackground(gridSize);
 
 class Section {
-  constructor(x, y, image, direction) {
+  constructor(x, y, direction) {
     this.coordinates = { x: x, y: y };
-    this.image = image;
     this.direction = direction;
   }
 }
 
-// snake[0] always head, snake[snake.length - 1] always tail and rest body
-const snake = [];
+function getImage(index, direction){
+  switch (index){
+    case 0: return `images/head/${direction}.png`
+    case snake.length-1: return `images/tail/${direction}.png`
+    default: return `images/body/${direction}.png`
+  }
+}
+
+function getOffset(direction){
+  switch (direction){
+    case 'left': return [-45,0]
+    case 'right': return [45,0]
+    case 'up': return [0,-45]
+    case 'down': return [0,45]
+  }
+}
 
 function spawnSnake() {
-  const headCords = {
+  let headCords = {
     x: randomCordinate(textureSize * 3, canvas.width - textureSize * 3),
     y: randomCordinate(textureSize * 3, canvas.width - textureSize * 3),
   };
 
-  let directions = ["left", "right", "up", "down"];
-  let headDirection = directions[randomNum(0, 3)];
+  let directions = ['left', 'right', 'up', 'down'];
+  let direction = directions[randomNum(0, 3)];
 
-  snake.push(
-    new Section(
-      headCords.x,
-      headCords.y,
-      `images/head/${headDirection}.png`,
-      "left"
-    )
-  );
-  let bodySection = sectionDirection("body", headDirection, headCords);
-  let tailSection = sectionDirection("tail", headDirection, headCords);
-  console.log(bodySection, tailSection);
-  snake.push(
-    new Section(
-      bodySection[2].x,
-      bodySection[2].y,
-      `images/body/${bodySection[1]}.png`,
-      "left"
-    )
-  );
+  for (let i = 0; i < 4; i++) {
+    snake.push(
+      new Section(
+        headCords.x,
+        headCords.y,
+        direction
+      )
+    );
 
-  snake.push(
-    new Section(
-      tailSection[2].x,
-      tailSection[2].y,
-      `images/tail/${bodySection[1]}.png`,
-      "left"
-    )
-  );
-
-  return regenerateSnake();
-}
-
-function sectionDirection(sectionType, headDirection, headCords) {
-  let offset = sectionType == "body" ? textureSize : textureSize * 2;
-  switch (headDirection) {
-    case "left":
-      headCords.x += offset;
-      sectionType == "body"
-        ? (bodyDirection = "vertical")
-        : (bodyDirection = "left");
-
-      break;
-    case "right":
-      headCords.x -= offset;
-
-      sectionType == "body"
-        ? (bodyDirection = "vertical")
-        : (bodyDirection = "right");
-      break;
-    case "up":
-      headCords.y += offset;
-      sectionType == "body"
-        ? (bodyDirection = "horizontal")
-        : (bodyDirection = "up");
-
-      break;
-    case "down":
-      headCords.y -= offset;
-      bodyDirection = "horizontal";
-      sectionType == "body"
-        ? (bodyDirection = "horizontal")
-        : (bodyDirection = "down");
-      break;
+    let offset = getOffset(direction);
+    headCords.x -= offset[0]
+    headCords.y -= offset[1]
   }
-
-  return [sectionType, headDirection, headCords];
+  
 }
 
 function regenerateSnake() {
   for (let i = 0; i < snake.length; i++) {
     const section = new Image();
-    section.src = snake[i].image;
+    section.src = getImage(i, snake[i].direction);
 
     section.onload = function () {
       context.drawImage(
@@ -161,11 +124,21 @@ function regenerateSnake() {
     };
   }
 }
-spawnSnake();
 
-/*function updatePosition() {
-  for (let i = 0; i < snake.length; i++) {}
-}*/
+function updatePositions() {
+  let previous = [snake[0].x, snake[0].y]
+
+  let offset = getOffset(snake[0])
+  snake[0].x += offset[0]
+  snake[0].y += offset[1]
+
+  for (let i = 1; i < snake.length; i++) {
+    let current = [snake[i].x, snake[i].y]
+    [snake[i].x, snake[i].y] = [previous[0], previous[1]]
+    previous = current
+  }
+}
+
 
 function randomCordinate(min, max) {
   const random = Math.floor(Math.random() * (max - min + 1)) + min;
@@ -175,3 +148,10 @@ function randomNum(min, max) {
   const random = Math.floor(Math.random() * (max - min + 1)) + min;
   return random;
 }
+
+
+spawnSnake();
+regenerateSnake();
+
+console.log(snake)
+
