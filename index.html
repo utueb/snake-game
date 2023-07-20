@@ -14,7 +14,68 @@
   <body>
     <canvas id="canvas" width="900" height="900"></canvas>
 
-    <div class="popup"><button>Game Rules</button><button>Play!</button></div>
+    <div class="popup">
+      <button id="game-rules">Game Rules</button>
+      <ul id="gamerules-list">
+        <li>
+          <label for="speed">speed:</label
+          ><input type="range" id="speed" min="250" max="2000" />
+          <p class="value"></p>
+        </li>
+        <li>
+          <label for="grid-size">grid size:</label
+          ><input type="range" id="grid-size" min="10" max="50" value="10" />
+          <p class="value"></p>
+        </li>
+        <li>
+          <label for="food-count">food count:</label
+          ><input type="range" id="food-count" min="1" max="5" value="1" />
+          <p class="value"></p>
+        </li>
+        <li class="color-preview">
+          <div id="primary-color"></div>
+          <div id="secondary-color"></div>
+        </li>
+        <li>
+          <label for="R-value">R:</label
+          ><input
+            type="range"
+            id="R-value"
+            min="30"
+            max="225"
+            class="color-range"
+          />
+          <p class="value"></p>
+        </li>
+        <li>
+          <label for="G-value">G:</label
+          ><input
+            type="range"
+            id="G-value"
+            min="30"
+            max="225"
+            class="color-range"
+          />
+          <p class="value"></p>
+        </li>
+        <li>
+          <label for="B-value">B:</label
+          ><input
+            type="range"
+            id="B-value"
+            min="30"
+            max="225"
+            class="color-range"
+          />
+          <p class="value"></p>
+        </li>
+        <li>
+          <label for="bordered">bordered?</label
+          ><input type="checkbox" id="bordered" />
+        </li>
+      </ul>
+      <button>Play!</button>
+    </div>
 
     <script src="script.js
     "></script>

@@ -3,10 +3,35 @@ const context = canvas.getContext("2d");
 let speed = 500;
 let foodCount = 1;
 let borderedGame = false;
-let color = "rgb(255, 0, 0)";
+let primaryColor, secondaryColor;
 let gridSize = 20;
 let textureSize = canvas.width / gridSize;
 let isKeyPressed = false;
+
+document.getElementById("game-rules").addEventListener("click", function (e) {
+  document.getElementById("gamerules-list").classList.toggle("open");
+});
+
+document
+  .querySelectorAll("#gamerules-list input[type='range']")
+  .forEach((input) =>
+    input.addEventListener("input", function (e) {
+      e.target.parentElement.querySelector("p.value").innerHTML =
+        e.target.value;
+
+      if (e.target.classList.contains("color-range")) {
+        const R = Number(document.getElementById("R-value").value);
+        const G = Number(document.getElementById("G-value").value);
+        const B = Number(document.getElementById("B-value").value);
+        primaryColor = `rgb(${R + 30}, ${G + 30}, ${B + 30})`;
+        secondaryColor = `rgb(${R - 30}, ${G - 30}, ${B - 30})`;
+        document.getElementById("primary-color").style.background =
+          primaryColor;
+        document.getElementById("secondary-color").style.background =
+          secondaryColor;
+      }
+    })
+  );
 
 window.addEventListener("keydown", function (e) {
   if (!isKeyPressed) {

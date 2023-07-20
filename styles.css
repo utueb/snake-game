@@ -33,6 +33,72 @@ body {
   align-items: center;
   border-radius: 20px;
   box-shadow: inset 0px 0px 20px 4px rgb(0 0 0 / 25%);
+  transition: width 0.2s, height 0.2s;
 }
 .popup button {
+  width: 260px;
+  height: 80px;
+  font-size: 32px;
+  font-weight: bold;
+  border-radius: 4px;
+  background-color: gray;
+  color: white;
+  text-shadow: 0px 0px lightgray;
+  text-shadow: 2px 2px 1px lightgray;
+}
+.popup button:hover {
+  background-color: rgb(151, 151, 151);
+}
+
+.popup button:active {
+  background-color: green;
+}
+
+.popup:has(#gamerules-list.open) {
+  width: 570px;
+  height: 420px;
+}
+#gamerules-list {
+  list-style: none;
+  display: none;
+}
+
+#gamerules-list.open {
+  display: block;
+}
+
+#gamerules-list li {
+  margin: 4px 0px;
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: 3fr 4fr;
+  min-height: 18px;
+  position: relative;
+}
+#gamerules-list label {
+  justify-self: center;
+  -webkit-user-select: none;
+  user-select: none;
+}
+#gamerules-list input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  justify-self: start;
+}
+.color-preview {
+  grid-template-columns: 1fr 1fr !important;
+}
+.color-preview div {
+  border: 1px solid black;
+}
+#gamerules-list p.value {
+  position: absolute;
+  left: 100%;
+  margin-left: 20px;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.popup {
+  display: none;
 }
