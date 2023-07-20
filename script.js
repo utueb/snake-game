@@ -6,9 +6,9 @@ let borderedGame = false;
 let color = "rgb(255, 0, 0)";
 let gridSize = 20;
 let textureSize = canvas.width / gridSize;
+
 let isKeyPressed = false;
 
-let gameDirection;
 const snake = [];
 
 window.addEventListener("keydown", function (e) {
@@ -16,16 +16,22 @@ window.addEventListener("keydown", function (e) {
     switch (e.key) {
       case "w":
       case "ArrowUp":
+        changeDirection('up');
         break;
 
       case "s":
       case "ArrowDown":
+        changeDirection('down')
         break;
+
       case "a":
       case "ArrowLeft":
+        changeDirection('left')
         break;
+
       case "d":
       case "ArrowRight":
+        changeDirection('right')
         break;
 
         isKeyPressed = true;
@@ -58,8 +64,6 @@ function generateBackground(num) {
   }
 }
 
-generateBackground(gridSize);
-
 class Section {
   constructor(x, y, direction) {
     this.coordinates = { x: x, y: y };
@@ -77,10 +81,11 @@ function getImage(index, direction){
 
 function getOffset(direction){
   switch (direction){
-    case 'left': return [-45,0]
-    case 'right': return [45,0]
-    case 'up': return [0,-45]
-    case 'down': return [0,45]
+    case 'left': return [-textureSize,0];
+    case 'right': return [textureSize,0];
+    case 'up': return [0,-textureSize];
+    case 'down': return [0,textureSize];
+    default: return [0,0];
   }
 }
 
@@ -128,15 +133,19 @@ function regenerateSnake() {
 }
 
 function updatePositions() {
-  let previous = [snake[0].x, snake[0].y]
+  let previous = [snake[0].coordinates.x, snake[0].coordinates.y]
 
-  let offset = getOffset(snake[0])
-  snake[0].x += offset[0]
-  snake[0].y += offset[1]
+  snake[0].direction = gameDirection
+  let offset = getOffset(snake[0].direction)
+
+  snake[0].coordinates.x += offset[0]
+  snake[0].coordinates.y += offset[1]
 
   for (let i = 1; i < snake.length; i++) {
-    let current = [snake[i].x, snake[i].y]
-    [snake[i].x, snake[i].y] = [previous[0], previous[1]]
+    let current = [snake[i].coordinates.x, snake[i].coordinates.y]
+    //[snake[i].coordinates.x, snake[i].coordinates.y] = [previous[0], previous[1]]
+    snake[i].coordinates.x = previous[0]
+    snake[i].coordinates.y = previous[1]
     previous = current
   }
 }
@@ -150,15 +159,36 @@ function randomNum(min, max) {
   return random;
 }
 
-function repeatingTask(){
-  updatePositions();
-  regenerateSnake();
+let gameDirection;
+let nextDirection;
 
-  setTimeout(yourFunction, 1000);
+const vertical = ['left', 'right']
+const horizontal = ['up', 'down']
+function changeDirection(someDirection){
+  firstCheck: if(vertical.includes(someDirection) && vertical.includes(gameDirection))
+    break firstCheck;
+  
+  secondCheck: if(horizontal.includes(someDirection) && horizontal.includes(gameDirection))
+    break secondCheck;
+
+  gameDirection = someDirection;  
 }
+
 
 spawnSnake();
 
 console.log(snake)
+
+function repeatingTask(){
+  updatePositions();
+
+  generateBackground(gridSize);
+
+  regenerateSnake();
+
+  setTimeout(repeatingTask, 1000);
+
+  console.log(gameDirection)
+}
 
 repeatingTask();
