@@ -1,0 +1,19 @@
+body {
+  margin: 0px;
+  position: relative;
+  background-color: black;
+}
+* {
+  box-sizing: border-box;
+  padding: 0px;
+  margin: 0px;
+}
+
+#canvas {
+  width: 900px;
+  height: 900px;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
